@@ -66,7 +66,7 @@ def main():
     '''
     Coordinates the execution of the automation script
     '''
-    ticker = "AAPL"
+    ticker = "GOOGL"
     data = download_stock_data(ticker)
     summary = process_data(data)
     
