@@ -1,4 +1,4 @@
-# Stock Automation Project
+# Stock Automation 
 
 ## Overview
 
