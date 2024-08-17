@@ -16,6 +16,12 @@ def download_stock_data(ticker):
     print(data)
     return data
 
+def get_full_name(ticker):
+    stock = yf.Ticker(ticker)
+    company_name = stock.info.get("longName", ticker)
+    return company_name
+
+
 # Process the data
 def process_data(data):
     summary = data.describe()
@@ -23,8 +29,15 @@ def process_data(data):
     print(summary)
     return summary
 
+    
+def toHtml(summary):
+    """
+    Converts the summary dataframe to an html table
+    """
+    return summary.to_html()
+
 # Send email with summary
-def send_email(subject, body, recipient):
+def send_email(subject, body, recipient, ticker, company):
     # Credentials from environment variables
     sender_email = os.getenv("SENDER_MAIL")
     email_password = os.getenv("MAIL_PASS")  
@@ -37,13 +50,17 @@ def send_email(subject, body, recipient):
     msg['To'] = recipient
     msg['Subject'] = subject
     
-    # Attach both plain text and HTML versions of the email body
+   # Plain text version
     text = f"{body}"
+    
+    # HTML version with an HTML table
     html = f"""\
     <html>
       <body>
-        <h1>{subject}</h1>
-        <p>{body.replace('\n', '<br>')}</p>
+        <p>Hello,</p>
+        <p>Here is your daily stock summary for {company} as of {datetime.now().strftime('%Y-%m-%d')}:</p>
+        {body}
+        <p>Best regards,<br>Your Stock Automation System</p>
       </body>
     </html>
     """
@@ -66,15 +83,18 @@ def main():
     '''
     Coordinates the execution of the automation script
     '''
-    ticker = "GOOGL"
+    ticker = "AAPL"
+    company_name = get_full_name(ticker)
     data = download_stock_data(ticker)
     summary = process_data(data)
     
-    subject = f"Daily stock summary for {ticker} - {datetime.now().strftime('%Y-%m-%d')}"
-    body = f"Summary statistics:\n\n{summary}"
-    
+    subject = f"Daily stock summary for {company_name} ({ticker}) - {datetime.now().strftime('%Y-%m-%d')}"
+    formatted_summary = toHtml(summary)
+    body = f"""
+    {formatted_summary}
+    """
     recipient = "subhgogoi@gmail.com"
-    send_email(subject, body, recipient)
+    send_email(subject, body, recipient, ticker, company_name)
     
 if __name__ == "__main__":
     main()

@@ -1,4 +1,4 @@
-# Stock Automation 
+# Stock Automation Project
 
 ## Overview
 
@@ -57,7 +57,7 @@ The cron job is configured to automate the execution of the script. The configur
     crontab cronjob.txt
     ```
 
-This will set up the cron job according to the schedule defined in the cronjob.txt file.
+This will set up the cron job according to the schedule defined in the cronjob.txt file. ***But make sure to replace SENDER_MAIL and MAIL_PASS with the correct environment variables.***
 
 ## Usage
 
