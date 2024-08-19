@@ -10,6 +10,9 @@ from email.mime.text import MIMEText
 
 # Download stock prices
 def download_stock_data(ticker):
+    """
+    Downloads and returns stock price data for a specific ticker symbol
+    """
     stock = yf.Ticker(ticker)
     data = stock.history(period='1d')
     print(f"Downloaded data for {ticker}:")
@@ -17,6 +20,9 @@ def download_stock_data(ticker):
     return data
 
 def get_full_name(ticker):
+    """
+    Returns the full company name of a ticker symbol
+    """
     stock = yf.Ticker(ticker)
     company_name = stock.info.get("longName", ticker)
     return company_name
